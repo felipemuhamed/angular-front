@@ -1,27 +1,43 @@
-import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http'; // Import HttpClientModule
-import { FormsModule, ReactiveFormsModule } from '@angular/forms'; // Import FormsModule and ReactiveFormsModule
+import { NgModule, APP_INITIALIZER } from '@angular/core';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { UserListComponent } from './components/user-list/user-list.component';
-import { UserFormComponent } from './components/user-form/user-form.component';
+import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
+import { AuthService } from './core/services/keycloak.service';
+import { AuthInterceptor } from './core/interceptors/auth.interceptor'; // Assuming you might add an interceptor
+
+function initializeKeycloak(keycloak: KeycloakService, authService: AuthService) {
+  return () => authService.init();
+}
 
 @NgModule({
   declarations: [
-    AppComponent,
-    UserListComponent,
-    UserFormComponent
+    AppComponent
+    // ... other components
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule, // Add HttpClientModule here
-    FormsModule, // Add FormsModule here
-    ReactiveFormsModule // Add ReactiveFormsModule here
+    HttpClientModule,
+    KeycloakAngularModule
   ],
-  providers: [],
+  providers: [
+    KeycloakService, // Provide KeycloakService itself
+    AuthService, // Provide your custom AuthService
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initializeKeycloak,
+      multi: true,
+      deps: [KeycloakService, AuthService]
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor, // Register the interceptor if needed
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

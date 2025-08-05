@@ -1,0 +1,8 @@
+<!-- This file is used by Keycloak for silent SSO checks. It must be served from the application's origin. -->
+<html>
+  <body>
+    <script>
+      parent.postMessage(location.href, location.origin);
+    </script>
+  </body>
+</html>
