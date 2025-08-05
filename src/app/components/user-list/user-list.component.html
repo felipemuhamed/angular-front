@@ -1,0 +1,45 @@
+<h2>Gerenciamento de Usuários</h2>
+
+<div class="actions-container">
+  <input type="text" placeholder="Pesquisar por nome ou e-mail" [(ngModel)]="searchTerm" (keyup.enter)="onSearchChange()">
+  <button (click)="addUser()">Adicionar Usuário</button>
+</div>
+
+<div *ngIf="isLoading" class="loader">Carregando usuários...</div>
+
+<table *ngIf="!isLoading && users.length > 0">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nome</th>
+      <th>E-mail</th>
+      <th>Cargo</th>
+      <th>Status</th>
+      <th>Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let user of users">
+      <td>{{ user.id }}</td>
+      <td>{{ user.name }}</td>
+      <td>{{ user.email }}</td>
+      <td>{{ user.role }}</td>
+      <td>{{ user.status === 'active' ? 'Ativo' : 'Inativo' }}</td>
+      <td>
+        <button (click)="editUser(user.id)">Editar</button>
+        <button (click)="deleteUser(user.id)">Excluir</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<div *ngIf="!isLoading && users.length === 0" class="no-data">
+  Nenhum usuário encontrado.
+</div>
+
+<div *ngIf="totalUsers > pageSize" class="pagination-controls">
+  <!-- Basic pagination, would typically use Angular Material Paginator -->
+  <button [disabled]="currentPage === 1" (click)="onPageChange({pageIndex: currentPage - 2, pageSize: pageSize})">Anterior</button>
+  <span>Página {{ currentPage }} de {{ Math.ceil(totalUsers / pageSize) }}</span>
+  <button [disabled]="currentPage * pageSize >= totalUsers" (click)="onPageChange({pageIndex: currentPage, pageSize: pageSize})">Proxima</button>
+</div>

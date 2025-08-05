@@ -1,0 +1,61 @@
+<h2>{{ isEditMode ? 'Editar Usuário' : 'Adicionar Novo Usuário' }}</h2>
+
+<div *ngIf="isLoading" class="loader">Carregando...</div>
+
+<form [formGroup]="userForm" (ngSubmit)="onSubmit()" *ngIf="!isLoading">
+  <div>
+    <label for="name">Nome:</label>
+    <input id="name" type="text" formControlName="name">
+    <div *ngIf="userForm.get('name')?.invalid && userForm.get('name')?.touched" class="error-message">
+      Nome é obrigatório.
+    </div>
+  </div>
+
+  <div>
+    <label for="email">E-mail:</label>
+    <input id="email" type="email" formControlName="email">
+    <div *ngIf="userForm.get('email')?.invalid && userForm.get('email')?.touched" class="error-message">
+      <span *ngIf="userForm.get('email')?.errors?.['required']">E-mail é obrigatório.</span>
+      <span *ngIf="userForm.get('email')?.errors?.['email']">E-mail inválido.</span>
+    </div>
+  </div>
+
+  <div>
+    <label for="password">Senha:</label>
+    <input id="password" [type]="passwordVisible ? 'text' : 'password'" formControlName="password">
+    <button type="button" (click)="togglePasswordVisibility()">{{ passwordVisible ? 'Ocultar' : 'Mostrar' }}</button>
+    <div *ngIf="userForm.get('password')?.invalid && userForm.get('password')?.touched" class="error-message">
+      <span *ngIf="userForm.get('password')?.errors?.['required']">Senha é obrigatória.</span>
+      <span *ngIf="userForm.get('password')?.errors?.['minlength']">Senha deve ter no mínimo 6 caracteres.</span>
+    </div>
+  </div>
+
+  <div>
+    <label for="role">Cargo:</label>
+    <select id="role" formControlName="role">
+      <option value="">Selecione um cargo</option>
+      <option value="admin">Administrador</option>
+      <option value="user">Usuário</option>
+      <!-- Add more roles as needed -->
+    </select>
+    <div *ngIf="userForm.get('role')?.invalid && userForm.get('role')?.touched" class="error-message">
+      Cargo é obrigatório.
+    </div>
+  </div>
+
+  <div>
+    <label for="status">Status:</label>
+    <select id="status" formControlName="status">
+      <option value="active">Ativo</option>
+      <option value="inactive">Inativo</option>
+    </select>
+    <div *ngIf="userForm.get('status')?.invalid && userForm.get('status')?.touched" class="error-message">
+      Status é obrigatório.
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <button type="submit" [disabled]="userForm.invalid">Salvar</button>
+    <button type="button" (click)="goBack()">Cancelar</button>
+  </div>
+</form>
