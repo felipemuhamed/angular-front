@@ -1,0 +1,13 @@
+<h2>Lista de Usuários</h2>
+
+<div *ngIf="users.length === 0; else userList">
+  <p>Nenhum usuário encontrado.</p>
+</div>
+
+<ng-template #userList>
+  <ul>
+    <li *ngFor="let user of users">
+      ID: {{ user.id }} - Nome: {{ user.name }}
+    </li>
+  </ul>
+</ng-template>
