@@ -1,0 +1,13 @@
+<html>
+<head>
+    <title>Silent Check SSO</title>
+</head>
+<body>
+    <script>
+        // This script is used by Keycloak for silent token refreshes (silent check SSO).
+        // It must be served from the same origin as your Angular application.
+        // It simply posts the current URL back to the parent window.
+        parent.postMessage(location.href, location.origin);
+    </script>
+</body>
+</html>
