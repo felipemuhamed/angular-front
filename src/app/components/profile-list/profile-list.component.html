@@ -1,0 +1,48 @@
+<div class="profile-list-container">
+  <h2>Manage Profiles</h2>
+
+  <div class="actions-row">
+    <input type="text" placeholder="Search by name or description..." (input)="onSearchChange($event)" class="search-input">
+    <button (click)="addProfile()" class="add-button">Add New Profile</button>
+  </div>
+
+  <div *ngIf="isLoading" class="loader">Loading profiles...</div>
+
+  <div *ngIf="!isLoading && profiles.length === 0" class="no-data-message">
+    No profiles found.
+  </div>
+
+  <table *ngIf="!isLoading && profiles.length > 0">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let profile of profiles">
+        <td>{{ profile.id }}</td>
+        <td>{{ profile.name }}</td>
+        <td>{{ profile.description }}</td>
+        <td>{{ profile.status | titlecase }}</td>
+        <td>
+          <button (click)="editProfile(profile.id)" class="edit-button">Edit</button>
+          <button (click)="deleteProfile(profile.id)" class="delete-button">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="!isLoading && totalProfiles > pageSize" class="pagination-controls">
+    <mat-paginator [length]="totalProfiles"
+                   [pageSize]="pageSize"
+                   [pageSizeOptions]="[5, 10, 25, 50]"
+                   [pageIndex]="currentPage - 1"
+                   (page)="onPageChange($event)"
+                   aria-label="Select page of profiles">
+    </mat-paginator>
+  </div>
+</div>

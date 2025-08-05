@@ -1,21 +1,15 @@
 <!-- src/app/app.component.html -->
 <header>
-  <h1>{{ title }}</h1>
   <nav>
     <a routerLink="/users">Users List</a>
     <a routerLink="/users/add" *ngIf="hasAdminRole()">Add User</a>
+    <a routerLink="/profiles" *ngIf="hasAdminRole()">Manage Profiles</a> <!-- New link -->
     <span *ngIf="isLoggedIn" style="margin-left: 20px;">
       Welcome, <strong>{{ userProfile?.firstName || userProfile?.username }}</strong>!
       <button (click)="logout()" style="margin-left: 10px;">Logout</button>
-    </span>
-    <span *ngIf="!isLoggedIn" style="margin-left: 20px;">
-      <button (click)="login()">Login</button>
     </span>
   </nav>
 </header>
 <main>
   <router-outlet></router-outlet>
 </main>
-<footer>
-  <p>&copy; 2023 Angular App with Keycloak</p>
-</footer>
