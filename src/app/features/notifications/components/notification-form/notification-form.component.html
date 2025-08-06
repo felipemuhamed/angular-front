@@ -1,0 +1,97 @@
+<div class="notification-form-container">
+  <h2>{{ isEditMode ? 'Editar Notificação' : 'Criar Nova Notificação' }}</h2>
+
+  <div *ngIf="isLoading" class="loading-spinner">
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    <p>Carregando...</p>
+  </div>
+
+  <form [formGroup]="notificationForm" (ngSubmit)="onSubmit()" class="notification-form">
+    <mat-form-field appearance="outline">
+      <mat-label>Título</mat-label>
+      <input matInput formControlName="title" required>
+      <mat-error *ngIf="notificationForm.get('title')?.hasError('required') && notificationForm.get('title')?.touched">
+        Título é obrigatório.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Mensagem</mat-label>
+      <textarea matInput formControlName="message" rows="5" required></textarea>
+      <mat-error *ngIf="notificationForm.get('message')?.hasError('required') && notificationForm.get('message')?.touched">
+        Mensagem é obrigatória.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Público-alvo</mat-label>
+      <mat-select formControlName="targetAudienceType" required>
+        <mat-option *ngFor="let audienceType of targetAudiences" [value]="audienceType">
+          {{ audienceType | titlecase }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="notificationForm.get('targetAudienceType')?.hasError('required') && notificationForm.get('targetAudienceType')?.touched">
+        Público-alvo é obrigatório.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" *ngIf="notificationForm.get('targetAudienceType')?.value === 'usuários específicos'">
+      <mat-label>Selecionar Usuários</mat-label>
+      <mat-select formControlName="targetAudienceUsers" multiple required>
+        <mat-option *ngFor="let user of availableUsers" [value]="user">{{ user }}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="notificationForm.get('targetAudienceUsers')?.hasError('required') && notificationForm.get('targetAudienceUsers')?.touched">
+        Selecione pelo menos um usuário.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" *ngIf="notificationForm.get('targetAudienceType')?.value === 'perfis'">
+      <mat-label>Selecionar Perfis</mat-label>
+      <mat-select formControlName="targetAudienceProfiles" multiple required>
+        <mat-option *ngFor="let profile of availableProfiles" [value]="profile">{{ profile }}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="notificationForm.get('targetAudienceProfiles')?.hasError('required') && notificationForm.get('targetAudienceProfiles')?.touched">
+        Selecione pelo menos um perfil.
+      </mat-error>
+    </mat-form-field>
+
+    <div class="date-time-group">
+      <mat-form-field appearance="outline" class="date-field">
+        <mat-label>Data de Envio</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="sentAt" required>
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        <mat-error *ngIf="notificationForm.get('sentAt')?.hasError('required') && notificationForm.get('sentAt')?.touched">
+          Data de envio é obrigatória.
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="time-field">
+        <mat-label>Hora de Envio</mat-label>
+        <input matInput type="time" formControlName="sentAtTime" required>
+        <mat-error *ngIf="notificationForm.get('sentAtTime')?.hasError('required') && notificationForm.get('sentAtTime')?.touched">
+          Hora de envio é obrigatória.
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Status Inicial</mat-label>
+      <mat-select formControlName="status" required>
+        <mat-option *ngFor="let status of notificationStatuses" [value]="status">{{ status | titlecase }}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="notificationForm.get('status')?.hasError('required') && notificationForm.get('status')?.touched">
+        Status é obrigatório.
+      </mat-error>
+    </mat-form-field>
+
+    <div class="form-actions">
+      <button mat-raised-button color="primary" type="submit" [disabled]="notificationForm.invalid || isLoading">
+        <mat-icon>{{ isEditMode ? 'save' : 'add' }}</mat-icon> {{ isEditMode ? 'Salvar' : 'Criar' }}
+      </button>
+      <button mat-raised-button type="button" (click)="cancel()">
+        <mat-icon>cancel</mat-icon> Cancelar
+      </button>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,61 @@
+.notification-list-container {
+  padding: 20px;
+
+  h2 {
+    margin-bottom: 20px;
+    color: #3f51b5;
+  }
+
+  .filter-section {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+    align-items: center;
+    flex-wrap: wrap;
+
+    mat-form-field {
+      width: 250px;
+    }
+
+    button {
+      height: 56px; /* Align with mat-form-field height */
+    }
+  }
+
+  .table-container {
+    position: relative;
+    overflow: auto;
+    max-height: 600px; /* Adjust as needed */
+
+    table {
+      width: 100%;
+      min-width: 800px; /* Ensure table doesn't get too narrow */
+    }
+
+    .mat-column-actions {
+      width: 120px; /* Fixed width for action buttons */
+      text-align: center;
+    }
+
+    .loading-spinner {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.8);
+      z-index: 10;
+      mat-progress-bar {
+        width: 80%;
+      }
+      p {
+        margin-top: 10px;
+        color: #555;
+      }
+    }
+  }
+}

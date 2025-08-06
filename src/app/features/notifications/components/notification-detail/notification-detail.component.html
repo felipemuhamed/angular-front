@@ -1,0 +1,47 @@
+<div class="notification-detail-container">
+  <h2>Detalhes da Notificação</h2>
+
+  <div *ngIf="isLoading" class="loading-spinner">
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    <p>Carregando detalhes da notificação...</p>
+  </div>
+
+  <mat-card *ngIf="notification && !isLoading" class="notification-card">
+    <mat-card-header>
+      <mat-card-title>{{ notification.title }}</mat-card-title>
+      <mat-card-subtitle>ID: {{ notification.id }}</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <p><strong>Mensagem:</strong> {{ notification.message }}</p>
+      <p><strong>Status:</strong> {{ notification.status | titlecase }}</p>
+      <p><strong>Data de Envio:</strong> {{ notification.sentAt | date:'full' }}</p>
+      <p><strong>Público-alvo:</strong>
+        <ng-container *ngIf="Array.isArray(notification.targetAudience); else singleAudience">
+          {{ notification.targetAudience.join(', ') }}
+        </ng-container>
+        <ng-template #singleAudience>
+          {{ notification.targetAudience | titlecase }}
+        </ng-template>
+      </p>
+
+      <div *ngIf="notification.recipients && notification.recipients.length > 0" class="recipients-section">
+        <h3>Recebedores:</h3>
+        <ul>
+          <li *ngFor="let recipient of notification.recipients">{{ recipient }}</li>
+        </ul>
+      </div>
+    </mat-card-content>
+    <mat-card-actions align="end">
+      <button mat-raised-button (click)="goBack()">
+        <mat-icon>arrow_back</mat-icon> Voltar
+      </button>
+    </mat-card-actions>
+  </mat-card>
+
+  <div *ngIf="!notification && !isLoading" class="no-data-message">
+    <p>Notificação não encontrada.</p>
+    <button mat-raised-button (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon> Voltar
+    </button>
+  </div>
+</div>
