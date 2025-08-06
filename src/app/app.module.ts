@@ -6,7 +6,7 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { UserListComponent } from './components/user-list/user-list.component';
-import { UserFormComponent } => './components/user-form/user-form.component';
+import { UserFormComponent } from './components/user-form/user-form.component';
 
 // New imports for Profile Management
 import { ProfileListComponent } from './components/profile-list/profile-list.component';
