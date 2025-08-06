@@ -1,0 +1,65 @@
+.notification-form-container {
+  padding: 20px;
+
+  h2 {
+    margin-bottom: 20px;
+    color: #3f51b5;
+  }
+
+  .notification-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+    mat-form-field {
+      width: 100%;
+    }
+
+    .date-time-group {
+      display: flex;
+      gap: 15px;
+
+      .date-field, .time-field {
+        flex: 1;
+      }
+    }
+
+    .form-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 20px;
+
+      button {
+        min-width: 120px;
+      }
+    }
+  }
+
+  .loading-spinner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.8);
+    z-index: 10;
+    mat-progress-bar {
+      width: 80%;
+    }
+    p {
+      margin-top: 10px;
+      color: #555;
+    }
+  }
+}
