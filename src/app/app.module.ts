@@ -2,46 +2,32 @@ import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { UserListComponent } from './components/user-list/user-list.component';
-import { UserFormComponent } => './components/user-form/user-form.component';
-
-// New imports for Profile Management
+import { UserFormComponent } from './components/user-form/user-form.component';
 import { ProfileListComponent } from './components/profile-list/profile-list.component';
 import { ProfileFormComponent } from './components/profile-form/profile-form.component';
-import { ProfileService } from './services/profile.service';
-
 import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
-import { AuthGuard } from './guards/auth.guard';
-import { KeycloakAuthService } from './services/keycloak.service';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatPaginatorModule } from '@angular/material/paginator';
 
-function initializeKeycloak(keycloak: KeycloakService) {
-  return () =>
-    keycloak.init({
-      config: {
-        url: 'YOUR_KEYCLOAK_URL', // Replace with your Keycloak URL
-        realm: 'YOUR_REALM',     // Replace with your Keycloak Realm
-        clientId: 'YOUR_CLIENT_ID' // Replace with your Keycloak Client ID
-      },
-      initOptions: {
-        onLoad: 'check-sso',
-        silentCheckSsoRedirectUri:
-          window.location.origin + '/assets/silent-check-sso.html'
-      }
-    });
-}
+import { initializer } from './utils/app-init';
+
+// New imports for Call Record Management
+import { CallRecordListComponent } from './components/call-record-list/call-record-list.component';
+import { CallRecordFormComponent } from './components/call-record-form/call-record-form.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     UserListComponent,
     UserFormComponent,
-    ProfileListComponent, // Declare new component
-    ProfileFormComponent  // Declare new component
+    ProfileListComponent,
+    ProfileFormComponent,
+    CallRecordListComponent, // Declare new component
+    CallRecordFormComponent  // Declare new component
   ],
   imports: [
     BrowserModule,
@@ -51,19 +37,15 @@ function initializeKeycloak(keycloak: KeycloakService) {
     FormsModule,
     KeycloakAngularModule,
     BrowserAnimationsModule,
-    MatPaginatorModule
+    MatPaginatorModule // For pagination component
   ],
   providers: [
-    KeycloakService,
     {
       provide: APP_INITIALIZER,
-      useFactory: initializeKeycloak,
+      useFactory: initializer,
       multi: true,
-      deps: [KeycloakService]
+      deps: [KeycloakService],
     },
-    AuthGuard,
-    KeycloakAuthService,
-    ProfileService
   ],
   bootstrap: [AppComponent]
 })

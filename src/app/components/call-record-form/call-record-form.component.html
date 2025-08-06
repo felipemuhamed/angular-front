@@ -1,0 +1,72 @@
+<h2>{{ isEditMode ? 'Editar' : 'Adicionar' }} Registro de Chamada</h2>
+
+<form [formGroup]="callRecordForm" (ngSubmit)="onSubmit()">
+  <div *ngIf="isLoading" class="loading-spinner">Salvando...</div>
+  <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+  <div *ngIf="successMessage" class="success-message">{{ successMessage }}</div>
+
+  <div>
+    <label for="originNumber">Número de Origem:</label>
+    <input id="originNumber" type="text" formControlName="originNumber">
+    <div *ngIf="callRecordForm.get('originNumber')?.invalid && (callRecordForm.get('originNumber')?.dirty || callRecordForm.get('originNumber')?.touched)" class="error-message">
+      <span *ngIf="callRecordForm.get('originNumber')?.errors?.['required']">Número de origem é obrigatório.</span>
+      <span *ngIf="callRecordForm.get('originNumber')?.errors?.['pattern']">Formato de número de origem inválido (10-15 dígitos).</span>
+    </div>
+  </div>
+
+  <div>
+    <label for="destinationNumber">Número de Destino:</label>
+    <input id="destinationNumber" type="text" formControlName="destinationNumber">
+    <div *ngIf="callRecordForm.get('destinationNumber')?.invalid && (callRecordForm.get('destinationNumber')?.dirty || callRecordForm.get('destinationNumber')?.touched)" class="error-message">
+      <span *ngIf="callRecordForm.get('destinationNumber')?.errors?.['required']">Número de destino é obrigatório.</span>
+      <span *ngIf="callRecordForm.get('destinationNumber')?.errors?.['pattern']">Formato de número de destino inválido (10-15 dígitos).</span>
+    </div>
+  </div>
+
+  <div>
+    <label for="callDateTime">Data/Hora da Chamada:</label>
+    <input id="callDateTime" type="datetime-local" formControlName="callDateTime">
+    <div *ngIf="callRecordForm.get('callDateTime')?.invalid && (callRecordForm.get('callDateTime')?.dirty || callRecordForm.get('callDateTime')?.touched)" class="error-message">
+      Data/Hora da chamada é obrigatória.
+    </div>
+  </div>
+
+  <div>
+    <label for="duration">Duração (segundos):</label>
+    <input id="duration" type="number" formControlName="duration">
+    <div *ngIf="callRecordForm.get('duration')?.invalid && (callRecordForm.get('duration')?.dirty || callRecordForm.get('duration')?.touched)" class="error-message">
+      <span *ngIf="callRecordForm.get('duration')?.errors?.['required']">Duração é obrigatória.</span>
+      <span *ngIf="callRecordForm.get('duration')?.errors?.['min']">Duração deve ser um valor positivo.</span>
+    </div>
+  </div>
+
+  <div>
+    <label for="status">Status da Chamada:</label>
+    <select id="status" formControlName="status">
+      <option value="completed">Concluída</option>
+      <option value="missed">Perdida</option>
+      <option value="in_progress">Em Andamento</option>
+    </select>
+    <div *ngIf="callRecordForm.get('status')?.invalid && (callRecordForm.get('status')?.dirty || callRecordForm.get('status')?.touched)" class="error-message">
+      Status é obrigatório.
+    </div>
+  </div>
+
+  <div>
+    <label for="operator">Operador Responsável:</label>
+    <input id="operator" type="text" formControlName="operator">
+    <div *ngIf="callRecordForm.get('operator')?.invalid && (callRecordForm.get('operator')?.dirty || callRecordForm.get('operator')?.touched)" class="error-message">
+      Operador é obrigatório.
+    </div>
+  </div>
+
+  <div>
+    <label for="clientName">Cliente/Contato (Opcional):</label>
+    <input id="clientName" type="text" formControlName="clientName">
+  </div>
+
+  <div class="form-actions">
+    <button type="submit" [disabled]="isLoading">{{ isEditMode ? 'Salvar Alterações' : 'Adicionar Chamada' }}</button>
+    <button type="button" (click)="router.navigate(['/call-records'])">Cancelar</button>
+  </div>
+</form>

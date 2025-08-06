@@ -1,0 +1,54 @@
+<h2>Gerenciamento de Registros de Chamadas</h2>
+
+<div class="actions-container">
+  <input type="text" placeholder="Pesquisar por número de origem, destino ou operador" [(ngModel)]="searchTerm" (keyup.enter)="onSearchChange()">
+  <button (click)="addCallRecord()" class="add-button">Adicionar Nova Chamada</button>
+</div>
+
+<div *ngIf="isLoading" class="loading-spinner">Carregando registros...</div>
+
+<div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+
+<div *ngIf="!isLoading && callRecords.length === 0" class="no-records-message">
+  Nenhum registro de chamada encontrado.
+</div>
+
+<table *ngIf="!isLoading && callRecords.length > 0">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Origem</th>
+      <th>Destino</th>
+      <th>Data/Hora</th>
+      <th>Duração (seg)</th>
+      <th>Status</th>
+      <th>Operador</th>
+      <th>Cliente/Contato</th>
+      <th>Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let record of callRecords">
+      <td>{{ record.id }}</td>
+      <td>{{ record.originNumber }}</td>
+      <td>{{ record.destinationNumber }}</td>
+      <td>{{ record.callDateTime | date:'short' }}</td>
+      <td>{{ record.duration }}</td>
+      <td>{{ record.status | titlecase }}</td>
+      <td>{{ record.operator }}</td>
+      <td>{{ record.clientName || 'N/A' }}</td>
+      <td>
+        <button (click)="editCallRecord(record.id)" class="edit-button">Editar</button>
+        <button (click)="deleteCallRecord(record.id)" class="delete-button">Excluir</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<mat-paginator *ngIf="!isLoading && totalRecords > 0"
+  [length]="totalRecords"
+  [pageSize]="pageSize"
+  [pageSizeOptions]="[5, 10, 25, 50]"
+  [pageIndex]="currentPage - 1"
+  (page)="onPageChange($event)">
+</mat-paginator>

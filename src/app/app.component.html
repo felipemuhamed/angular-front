@@ -1,15 +1,20 @@
 <!-- src/app/app.component.html -->
 <header>
   <nav>
-    <a routerLink="/users">Users List</a>
-    <a routerLink="/users/add" *ngIf="hasAdminRole()">Add User</a>
-    <a routerLink="/profiles" *ngIf="hasAdminRole()">Manage Profiles</a> <!-- New link -->
-    <span *ngIf="isLoggedIn" style="margin-left: 20px;">
-      Welcome, <strong>{{ userProfile?.firstName || userProfile?.username }}</strong>!
-      <button (click)="logout()" style="margin-left: 10px;">Logout</button>
-    </span>
+    <a routerLink="/users" *ngIf="keycloakAuthService.hasRole('admin') || keycloakAuthService.hasRole('user')">Users List</a>
+    <a routerLink="/users/add" *ngIf="keycloakAuthService.hasRole('admin')">Add User</a>
+    <a routerLink="/profiles" *ngIf="keycloakAuthService.hasRole('admin')">Manage Profiles</a>
+    <a routerLink="/call-records" *ngIf="keycloakAuthService.hasRole('admin') || keycloakAuthService.hasRole('operator')">Manage Call Records</a> <!-- New link for Call Records -->
   </nav>
+  <div class="auth-controls">
+    <button *ngIf="!isLoggedIn" (click)="login()">Login</button>
+    <div *ngIf="isLoggedIn" class="user-info">
+      <span>Welcome, {{ userName }}!</span>
+      <button (click)="logout()">Logout</button>
+    </div>
+  </div>
 </header>
+
 <main>
   <router-outlet></router-outlet>
 </main>
