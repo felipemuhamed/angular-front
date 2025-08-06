@@ -1,0 +1,89 @@
+<div class="chamada-form-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>{{ isEditMode ? 'Editar Chamada' : 'Adicionar Nova Chamada' }}</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form [formGroup]="chamadaForm" (ngSubmit)="onSubmit()">
+        <div class="form-grid">
+          <mat-form-field appearance="outline">
+            <mat-label>Número de Origem</mat-label>
+            <input matInput formControlName="numeroOrigem" required placeholder="+5511987654321">
+            <mat-error *ngIf="chamadaForm.get('numeroOrigem')?.invalid && chamadaForm.get('numeroOrigem')?.touched">
+              Número de origem é obrigatório e deve ser um formato válido (E.164).
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Número de Destino</mat-label>
+            <input matInput formControlName="numeroDestino" required placeholder="+551112345678">
+            <mat-error *ngIf="chamadaForm.get('numeroDestino')?.invalid && chamadaForm.get('numeroDestino')?.touched">
+              Número de destino é obrigatório e deve ser um formato válido (E.164).
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Data e Hora da Chamada</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="dataHoraChamada" required>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error *ngIf="chamadaForm.get('dataHoraChamada')?.invalid && chamadaForm.get('dataHoraChamada')?.touched">
+              Data e hora da chamada são obrigatórias.
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Duração (segundos)</mat-label>
+            <input matInput type="number" formControlName="duracao" required min="0">
+            <mat-error *ngIf="chamadaForm.get('duracao')?.invalid && chamadaForm.get('duracao')?.touched">
+              Duração é obrigatória e deve ser um número positivo.
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Status da Chamada</mat-label>
+            <mat-select formControlName="statusChamada" required>
+              <mat-option *ngFor="let status of callStatuses" [value]="status">
+                {{ status | titlecase }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="chamadaForm.get('statusChamada')?.invalid && chamadaForm.get('statusChamada')?.touched">
+              Status da chamada é obrigatório.
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Operador Responsável</mat-label>
+            <input matInput formControlName="operadorResponsavel" required>
+            <mat-error *ngIf="chamadaForm.get('operadorResponsavel')?.invalid && chamadaForm.get('operadorResponsavel')?.touched">
+              Operador responsável é obrigatório.
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Associar a Cliente/Contato</mat-label>
+            <mat-select formControlName="clienteId">
+              <mat-option [value]="null">Nenhum</mat-option>
+              <mat-option *ngFor="let client of availableClients" [value]="client.id">
+                {{ client.nome }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <mat-card-actions align="end">
+          <button mat-raised-button type="button" (click)="onCancel()">
+            <mat-icon>cancel</mat-icon> Cancelar
+          </button>
+          <button mat-raised-button color="primary" type="submit" [disabled]="chamadaForm.invalid || isLoading">
+            <mat-icon>save</mat-icon> {{ isEditMode ? 'Salvar Alterações' : 'Adicionar Chamada' }}
+          </button>
+        </mat-card-actions>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <div *ngIf="isLoading" class="loading-overlay">
+    <mat-spinner></mat-spinner>
+  </div>
+</div>

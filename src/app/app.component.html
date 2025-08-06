@@ -2,14 +2,14 @@
 <header>
   <nav>
     <a routerLink="/users">Users List</a>
-    <a routerLink="/users/add" *ngIf="hasAdminRole()">Add User</a>
-    <a routerLink="/profiles" *ngIf="hasAdminRole()">Manage Profiles</a> <!-- New link -->
-    <span *ngIf="isLoggedIn" style="margin-left: 20px;">
-      Welcome, <strong>{{ userProfile?.firstName || userProfile?.username }}</strong>!
-      <button (click)="logout()" style="margin-left: 10px;">Logout</button>
-    </span>
+    <a routerLink="/users/new" *ngIf="hasAdminRole()">Add User</a>
+    <a routerLink="/profiles" *ngIf="hasAdminRole()">Manage Profiles</a>
+    <a routerLink="/notifications">Manage Notifications</a>
+    <a routerLink="/chamadas">Manage Calls</a> <!-- New link for call management -->
+    <a (click)="logout()" href="#">Logout</a>
   </nav>
 </header>
+
 <main>
   <router-outlet></router-outlet>
 </main>
